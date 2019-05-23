@@ -1,0 +1,85 @@
+package me.wsman217.CrazyReference.configTools;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.wsman217.CrazyReference.CrazyReference;
+
+class ReadPlayerData {
+
+	int numbOfReferals;
+
+	int totalReferals;
+
+	FileConfiguration config;
+
+	List<String> values = new ArrayList<String>();
+	List<OfflinePlayer> referals = new ArrayList<OfflinePlayer>();
+
+	CrazyReference plugin;
+
+	public ReadPlayerData(UUID fileName, CrazyReference plugin) {
+		this.plugin = plugin;
+
+		File file = new File(plugin.getDataFolder() + "/PlayerData/" + fileName.toString() + ".yml");
+
+		config = YamlConfiguration.loadConfiguration(file);
+
+		totalReferals = config.getInt("Referals.Amount");
+	}
+
+	public ReadPlayerData(UUID fileName, UUID nameToLookFor, CrazyReference plugin, boolean lookForName) {
+		this.plugin = plugin;
+
+		File file = new File(plugin.getDataFolder() + "/PlayerData/" + fileName.toString() + ".yml");
+
+		config = YamlConfiguration.loadConfiguration(file);
+
+		numbOfReferals = config.getInt("Referals.Amount");
+
+		values.clear();
+		if (lookForName) {
+			for (int i = 1; i <= numbOfReferals; i++) {
+				if (UUID.fromString(config.getString("Referals." + i + ".Name")) == nameToLookFor) {
+					values.add(0, config.getString("Referals." + i + ".Name"));
+					values.add(1, Long.toString(config.getLong("Referals." + i + ".Time")));
+					values.add(2, fileName.toString());
+				}
+			}
+		}
+	}
+
+	public boolean isOverLimit() {
+
+		int limit = plugin.getConfig().getInt("Settings.MaxAmountOfOpenReferences");
+		return limit > totalReferals ? false : true;
+	}
+
+	public List<String> returnValues(UUID fileName) {
+		values.clear();
+		for (int i = 1; i <= numbOfReferals; i++) {
+				values.add(0, config.getString("Referals." + i + ".Name"));
+				values.add(1, Long.toString(config.getLong("Referals." + i + ".Time")));
+				values.add(2, fileName.toString());
+		}
+		return values.isEmpty() ? null : values;
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<OfflinePlayer> getListOfPlayers() {
+
+		referals.clear();
+
+		for (int i = 0; i < totalReferals; i++) {
+			OfflinePlayer p = plugin.getServer().getOfflinePlayer(config.getString("Referals." + (i + 1) + ".PName"));
+			referals.add((i), p);
+		}
+		return referals.isEmpty() ? null : referals;
+	}
+}

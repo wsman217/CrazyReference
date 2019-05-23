@@ -1,0 +1,31 @@
+main: me.wsman217.CrazyReference.CrazyReference
+name: CrazyReference
+version: 2.1
+author: wsman217
+api-version: 1.13
+
+commands:
+   refer:
+      description: "Basic referal command"
+      usage: /refer <arguments>
+
+permissions:
+   CrazyReference.*: 
+      description: Gives access to all CrazyReference commands.
+      default: op
+      children: 
+         CrazyReference.help: true
+         CrazyReference.list: true
+         CrazyReference.del: true
+         CrazyReference.new: true
+         CrazyReference.reload: true
+   CrazyReference.help:
+      description: "Help command for CrazyReference"
+   CrazyReference.list:
+      description: "Lists all current referals"
+   CrazyReference.del: 
+      description: "Delete a referal"
+   CrazyReference.new:
+      description: "Add a referal"
+   CrazyReference.reload:
+      description: "Reload CrazyReference config"

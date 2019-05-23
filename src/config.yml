@@ -1,0 +1,31 @@
+Settings:
+   MaxAmountOfOpenReferences: 5
+
+Rewards:
+   OneBeingRefered:
+      Items:
+         #You will make up your own name for this part it can not be the same as any of the other names that you have made. Do not do the same name with different cases. Ex: Cobblestone, cobbleStone
+         CobbleStone:
+            Name: "&4Test"
+            Material: "cobblestone"
+            Amount: 10
+            Enchants: {}
+            Lore: {}
+      Commands:
+         - "msg %player% you just won a prize"
+         
+   OneThatRefered:
+      Items:
+         String:
+            Name: "&3Test"
+            Material: "String"
+            Amount: 5
+            Enchants:
+               - "Knockback:20"
+            Lore:
+               - "&5A piece of string"
+               - "&2just for you"
+      Commands:
+         - "msg %player% you won a prize to"
+            
+         
