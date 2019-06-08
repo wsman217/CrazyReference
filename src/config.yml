@@ -1,5 +1,15 @@
 Settings:
    MaxAmountOfOpenReferences: 5
+   
+SQLite: false
+SQL:
+   #By default this is local host
+   Host: 127.0.0.1
+   #This is the default SQL port
+   Port: '3306'
+   Database: Database
+   User: root
+   Password: toor
 
 Rewards:
    OneBeingRefered:
@@ -27,5 +37,3 @@ Rewards:
                - "&2just for you"
       Commands:
          - "msg %player% you won a prize to"
-            
-         

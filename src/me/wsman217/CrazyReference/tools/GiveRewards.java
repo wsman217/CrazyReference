@@ -68,6 +68,11 @@ public class GiveRewards {
 			s = s.replaceAll("%player%", referee.getName());
 			doCommands(s);
 		}
+
+		for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+				.getStringList("Rewards.OneBeingReferred")) {
+			referee.sendMessage(translateColors(s));
+		}
 	}
 
 	private boolean doCommands(String cmd) {
@@ -107,6 +112,11 @@ public class GiveRewards {
 		referer.getInventory().addItem(item);
 		referer.updateInventory();
 
+		for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+				.getStringList("Rewards.OneThatRefered")) {
+			referer.sendMessage(translateColors(s));
+		}
+		
 		for (String s : config.getStringList(path + ".Commands")) {
 			s = s.replaceAll("%player%", referer.getName());
 			doCommands(s);
@@ -133,5 +143,9 @@ public class GiveRewards {
 		int level = Integer.parseInt(list.substring(list.indexOf(":") + 1, list.length()));
 
 		return level == 0 ? null : level;
+	}
+
+	private String translateColors(String s) {
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 }

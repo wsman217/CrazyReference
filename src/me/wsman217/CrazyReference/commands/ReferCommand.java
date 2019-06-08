@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.wsman217.CrazyReference.CrazyReference;
+import me.wsman217.CrazyReference.tools.FileManager;
+import me.wsman217.CrazyReference.tools.PluginInfo;
 
 public class ReferCommand implements CommandExecutor {
 
@@ -31,7 +33,8 @@ public class ReferCommand implements CommandExecutor {
 
 		// Check if the command executor is the console
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "Only players are allowed to use this command!");
+			sender.sendMessage(translateColors(
+					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 			return true;
 		}
 
@@ -66,10 +69,13 @@ public class ReferCommand implements CommandExecutor {
 		if (p.hasPermission("CrazyReference.reload")) {
 			// Reload the plugin's main config
 			plugin.reloadConfig();
-			p.sendMessage(ChatColor.GRAY + "CrazyReference's config has been reloaded.");
+			plugin.getFileManager().reloadAllFiles();
+			p.sendMessage(translateColors(
+					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.ConfigsReloaded")));
 			return true;
 		}
-		p.sendMessage(ChatColor.RED + "You do not have the correct permissions to use this command!");
+		p.sendMessage(translateColors(
+				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 		return true;
 	}
 
@@ -77,6 +83,8 @@ public class ReferCommand implements CommandExecutor {
 
 		// Check for the help permission
 		if (p.hasPermission("CrazyReference.help")) {
+			p.sendMessage(ChatColor.DARK_AQUA + "CrazyReference Version: " + PluginInfo.version);
+
 			p.sendMessage(ChatColor.DARK_AQUA + "-----------CrazyReference Commands-----------");
 			// If they do not have the permission for a command they will not be able to see
 			// the command in the help message.
@@ -96,7 +104,8 @@ public class ReferCommand implements CommandExecutor {
 			p.sendMessage(ChatColor.DARK_AQUA + "---------------------------------------------");
 			return true;
 		}
-		p.sendMessage(ChatColor.RED + "You do not have the correct permissions to use this command.");
+		p.sendMessage(translateColors(
+				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 		return true;
 	}
 
@@ -119,19 +128,22 @@ public class ReferCommand implements CommandExecutor {
 
 			// Check if the player has a data file made by CrazyReference
 			if (!plugin.cMan.hasDataFile(p.getUniqueId())) {
-				p.sendMessage(ChatColor.RED + "You have not refered anyone yet.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("General.YouHaveNotReferredAnyoneYet")));
 				return true;
 			}
 
 			// Try to remove nameToRemove from the player's data file
 			if (plugin.cMan.removePlayerFromFile(p.getUniqueId(), player.getUniqueId()))
-				p.sendMessage(ChatColor.LIGHT_PURPLE + "This player has been removed from your referal list.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.Del.PlayerRemoved")));
 			else
-				p.sendMessage(ChatColor.GRAY
-						+ "Unable to remove this player from your referal list please check that you have the correct name.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.Del.NotInReferalList")));
 			return true;
 		}
-		p.sendMessage(ChatColor.RED + "You do not have the correct permissions to use this command.");
+		p.sendMessage(translateColors(
+				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 		return true;
 	}
 
@@ -144,22 +156,27 @@ public class ReferCommand implements CommandExecutor {
 
 			// Check if playerList is empty basically
 			if (playerList == null) {
-				p.sendMessage(ChatColor.LIGHT_PURPLE + "You have not refered anyone yet.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("General.YouHaveNotReferredAnyoneYet")));
 				return true;
 			}
 
 			int count = 1;
 
-			p.sendMessage(ChatColor.GRAY + "List of all players you have refered.");
+			p.sendMessage(translateColors(
+					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("Commands.List.TopLine")));
 
 			// Go through each of the players in playerList and send a message to the player
 			for (OfflinePlayer player : playerList) {
-				p.sendMessage(ChatColor.LIGHT_PURPLE + "[" + count + "] " + ChatColor.GRAY + player.getName());
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.List.ListPlayers").replaceAll("%count%", "" + count)
+						.replaceAll("%player%", player.getName())));
 				count++;
 			}
 			return true;
 		}
-		p.sendMessage(ChatColor.RED + "You do not have the correct permissions to use this command.");
+		p.sendMessage(translateColors(
+				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 		return true;
 	}
 
@@ -179,7 +196,8 @@ public class ReferCommand implements CommandExecutor {
 
 			// Check if the name to be added has played before
 			if (nameToAdd.hasPlayedBefore()) {
-				p.sendMessage(ChatColor.LIGHT_PURPLE + "This player has played before.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.New.PlayerHasPlayedBefore")));
 				return true;
 			}
 
@@ -191,7 +209,8 @@ public class ReferCommand implements CommandExecutor {
 
 			// Check if player is going to go over the referal limit specified in the config
 			if (plugin.cMan.isOverReferalLimit(p.getUniqueId())) {
-				p.sendMessage(ChatColor.LIGHT_PURPLE + "You are unable to add another player to your referal list.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.New.UnableToAddPlayer")));
 				return true;
 			}
 
@@ -203,20 +222,26 @@ public class ReferCommand implements CommandExecutor {
 			if (readPData != null) {
 				if (!readPData.contains(nameToAdd.getUniqueId().toString())) {
 					plugin.cMan.addToPlayerFile(p.getUniqueId(), nameToAdd.getUniqueId());
-					p.sendMessage(
-							ChatColor.LIGHT_PURPLE + "The player " + args[1] + " has been added to your referal list.");
+					p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+							.getString("Commands.New.PlayerAdded").replaceAll("%player%", args[1])));
 					return true;
 				}
-				p.sendMessage(ChatColor.GRAY + "This player is already in your referal list.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.New.AlreadyInList")));
 				return true;
 			} else {
 				plugin.cMan.addToPlayerFile(p.getUniqueId(), nameToAdd.getUniqueId());
-				p.sendMessage(
-						ChatColor.LIGHT_PURPLE + "The player " + args[1] + " has been added to your referal list.");
+				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getString("Commands.New.PlayerAdded").replaceAll("%player%", args[1])));
 				return true;
 			}
 		}
-		p.sendMessage(ChatColor.RED + "You do not have the correct permissions to use this command!");
+		p.sendMessage(translateColors(
+				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
 		return true;
+	}
+
+	private String translateColors(String s) {
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 }

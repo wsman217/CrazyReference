@@ -29,6 +29,13 @@ class UpdatePlayerData {
 		file = new File(plugin.getDataFolder() + "/PlayerData/" + fileName.toString() + ".yml");
 		config = YamlConfiguration.loadConfiguration(file);
 	}
+	
+	public UpdatePlayerData(UUID fileName, CrazyReference plugin) {
+		this.plugin = plugin;
+		
+		file = new File(plugin.getDataFolder() + "/PlayerData/" + fileName.toString() + ".yml");
+		config = YamlConfiguration.loadConfiguration(file);
+	}
 
 	public boolean addPlayer() {
 
@@ -103,5 +110,19 @@ class UpdatePlayerData {
 			e.printStackTrace();
 		}
 		return found;
+	}
+	
+	public boolean incrementTotal() {
+		int total = config.getInt("TotalCompleted") + 1;
+		
+		config.set("TotalCompleted", (total));
+		
+		try {
+			config.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return config.getInt("TotalCompleted") == total ? true : false;
 	}
 }

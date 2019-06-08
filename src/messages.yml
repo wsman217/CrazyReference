@@ -1,0 +1,50 @@
+#In general there are only single line messages
+General:
+   NoPerms: "&5You do not have the correct permissions to use this command!"
+   ConfigsReloaded: "&dCrazyReference's config files have been reloaded."
+   YouHaveNotReferredAnyoneYet: "&4You have not referred anyone yet!"
+#All the way to commands are multi-line messages
+#So the messages will be sent in multiple lines like this comment
+#To add a new line add a '- "<Your message here>"'
+NewPlayerJoin: 
+   #The message sent when a player has been refered and joins
+   PlayerJoinedAskIfRefered: 
+      - ""
+      - "&dWere you invited to play this server by &7%player% &d?"
+      - "&dPlease send the respective &7yes &dor &7no in chat."
+      - "&dOthers will not be able to see your messages until you do so."
+      - ""
+   
+   WasReferred:
+      - "&dThank you for joining the server, here is a reward!"
+
+   WasNotReferred:
+      - "&dThank you for joining the server, enjoy your time on the server!"
+      - "&dYou are now able to chat with the rest of the server!"
+   UnableToSendMessage:
+      - "&5You are unable to send a message until you answer yes or no!"
+ReloadCommand:
+   ReloadComplete: "&7CrazyReference's config has been reloaded."
+Rewards:
+   OneBeingRefered:
+      - "&dYou have just won a reward for being referred to the server!"
+   OneThatRefered:
+      - "&dYou have just won a reward for refering someone to the server!"
+#Inside of Commands there are only single line messages do no add '-'
+Commands:
+   Del:
+      PlayerRemoved: "&dThis player has been removed from your referal list!"
+      NotInReferalList: "&7Unable to remove this player from your referal list please check that you have the correct name."
+   List: 
+      #This is the line above the list of players
+      TopLine: "&dPlayers that you have referred:"
+      #This will be repeated for all players in the list
+      ListPlayers: "&d[%count%] &7%player%"
+   New:
+      PlayerHasPlayedBefore: "&dThis player has played before!"
+      UnableToAddPlayer: "&dYou are unable to add another player to your referal list!"
+      PlayerAdded: "&dThe player %player% has been added to your referal list!"
+      AlreadyInList: "&7This player is already in your referal list!"
+      
+      
+      

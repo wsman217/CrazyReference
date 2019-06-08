@@ -62,8 +62,8 @@ public class configManager {
 	 * @return List<String> of all the information if there is nothing in it, it will return null
 	 */
 	public List<String> readPlayerData(UUID playerFile, UUID nameToLookFor) {
-		rPData = new ReadPlayerData(playerFile, nameToLookFor, plugin, true);
-		return rPData.returnValues(playerFile);
+		rPData = new ReadPlayerData(playerFile, plugin);
+		return rPData.findPlayer(playerFile, nameToLookFor);
 	}
 
 	/**
@@ -98,5 +98,10 @@ public class configManager {
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean incrementTotal(UUID player) {
+		updatePFile = new UpdatePlayerData(player, plugin);
+		return updatePFile.incrementTotal();
 	}
 }

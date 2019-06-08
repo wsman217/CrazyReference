@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.wsman217.CrazyReference.CrazyReference;
+import me.wsman217.CrazyReference.tools.FileManager;
 import net.md_5.bungee.api.ChatColor;
 
 @SuppressWarnings("deprecation")
@@ -31,9 +32,9 @@ public class ListenerPlayerJoin implements Listener {
 
 		if (e.getPlayer().hasPlayedBefore() == false) {
 			Player p = e.getPlayer();
-
+			
 			UUID pUUID = p.getUniqueId();
-
+			
 			List<String> variables = new ArrayList<String>();
 
 			for (Player players : plugin.getServer().getOnlinePlayers()) {
@@ -54,13 +55,12 @@ public class ListenerPlayerJoin implements Listener {
 				inConfirm.put(UUID.fromString(earliest.get(1)), UUID.fromString(earliest.get(2)));
 
 				Bukkit.getScheduler().runTaskLater(plugin, () -> {
-					p.sendMessage("");
-					p.sendMessage(ChatColor.AQUA + "Were you invited to play this server by " + ChatColor.GRAY
-							+ plugin.getServer().getPlayer(UUID.fromString(earliest.get(2))).getName() + ChatColor.AQUA
-							+ "?");
-					p.sendMessage(ChatColor.AQUA
-							+ "Please send the respective yes or no in chat.\nOthers will not be able to see your messages until you do so.");
-					p.sendMessage("");
+
+					for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+							.getStringList("NewPlayerJoin.PlayerJoinedAskIfRefered")) {
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replaceAll("%player%",
+								plugin.getServer().getPlayer(UUID.fromString(earliest.get(2))).getName())));
+					}
 				}, 20);
 			}
 		}
@@ -75,17 +75,31 @@ public class ListenerPlayerJoin implements Listener {
 
 			if (message.startsWith("y") || message.startsWith("Y")) {
 
+				for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getStringList("NewPlayerJoin.WasReferred")) {
+					ChatColor.translateAlternateColorCodes('&', s);
+					e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+				}
+
 				plugin.giveRewards.giveRewards(e.getPlayer(),
 						plugin.getServer().getPlayer(inConfirm.get(e.getPlayer().getUniqueId())));
+				plugin.cMan.incrementTotal(
+						plugin.getServer().getPlayer(inConfirm.get(e.getPlayer().getUniqueId())).getUniqueId());
 				inConfirm.remove(e.getPlayer().getUniqueId());
 				return;
 			} else if (message.startsWith("n") || message.startsWith("N")) {
-				e.getPlayer().sendMessage(
-						ChatColor.LIGHT_PURPLE + "Thank you, you are now able to talk in the server chat.");
+
+				for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+						.getStringList("NewPlayerJoin.WasNotReferred")) {
+					e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+				}
 				inConfirm.remove(e.getPlayer().getUniqueId());
 				return;
 			}
-			e.getPlayer().sendMessage(ChatColor.RED + "You are unable to chat untill you send yes or no.");
+			for (String s : plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
+					.getStringList("NewPlayerJoin.UnableToSendMessage")) {
+				e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+			}
 		}
 	}
 

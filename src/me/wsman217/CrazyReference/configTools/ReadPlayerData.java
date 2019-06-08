@@ -32,33 +32,25 @@ class ReadPlayerData {
 		config = YamlConfiguration.loadConfiguration(file);
 
 		totalReferals = config.getInt("Referals.Amount");
+		numbOfReferals = totalReferals;
 	}
-
-	public ReadPlayerData(UUID fileName, UUID nameToLookFor, CrazyReference plugin, boolean lookForName) {
-		this.plugin = plugin;
-
-		File file = new File(plugin.getDataFolder() + "/PlayerData/" + fileName.toString() + ".yml");
-
-		config = YamlConfiguration.loadConfiguration(file);
-
-		numbOfReferals = config.getInt("Referals.Amount");
-
-		values.clear();
-		if (lookForName) {
-			for (int i = 1; i <= numbOfReferals; i++) {
-				if (UUID.fromString(config.getString("Referals." + i + ".Name")) == nameToLookFor) {
-					values.add(0, config.getString("Referals." + i + ".Name"));
-					values.add(1, Long.toString(config.getLong("Referals." + i + ".Time")));
-					values.add(2, fileName.toString());
-				}
-			}
-		}
-	}
-
+	
 	public boolean isOverLimit() {
 
 		int limit = plugin.getConfig().getInt("Settings.MaxAmountOfOpenReferences");
 		return limit > totalReferals ? false : true;
+	}
+	
+	public List<String> findPlayer(UUID fileName, UUID nameToLookFor) {
+		values.clear();
+		for (int i = 1; i <= numbOfReferals; i++) {
+			if (config.getString("Referals." + i + ".Name").equals(nameToLookFor.toString())) {
+				values.add(0, config.getString("Referals." + i + ".Name"));
+				values.add(1, Long.toString(config.getLong("Referals." + i + ".Time")));
+				values.add(2, fileName.toString());
+			}
+		}
+		return values;
 	}
 
 	public List<String> returnValues(UUID fileName) {
