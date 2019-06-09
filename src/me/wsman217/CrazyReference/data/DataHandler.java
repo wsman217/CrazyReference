@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import me.wsman217.CrazyReference.CrazyReference;
 
 public class DataHandler {
 
@@ -59,12 +62,15 @@ public class DataHandler {
 	}
 
 	public void changeTotal(String p, int newTotal) {
+		@SuppressWarnings("deprecation")
+		OfflinePlayer player = CrazyReference.getInstance().getServer().getOfflinePlayer(p);
 		Connection connection = this.db.getConnection();
-		String statement = "REPLACE INTO reference_leaderboard(total_referrals) VALUES(?) WHERE UPPER(player_name)='"
-				+ p.toUpperCase() + "'";
+		String statement = "REPLACE INTO reference_leaderboard VALUES(?,?,?)";
 		try {
 			PreparedStatement ps1 = connection.prepareStatement(statement);
-			ps1.setInt(1, newTotal);
+			ps1.setString(1, player.getUniqueId().toString());
+			ps1.setString(2, player.getName());
+			ps1.setInt(3, newTotal);
 			ps1.execute();
 			ps1.close();
 		} catch (SQLException e) {

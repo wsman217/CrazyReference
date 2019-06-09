@@ -99,9 +99,4 @@ public class configManager {
 		else
 			return false;
 	}
-	
-	public boolean incrementTotal(UUID player) {
-		updatePFile = new UpdatePlayerData(player, plugin);
-		return updatePFile.incrementTotal();
-	}
 }

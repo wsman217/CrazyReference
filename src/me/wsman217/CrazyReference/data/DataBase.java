@@ -12,11 +12,7 @@ import me.wsman217.CrazyReference.CrazyReference;
 
 public class DataBase {
 	private Connection connection;
-	private CrazyReference plugin;
-
-	public DataBase() {
-		this.plugin = CrazyReference.getInstance();
-	}
+	private CrazyReference plugin = CrazyReference.getInstance();
 
 	public void openDatabaseConnection() {
 		FileConfiguration config = plugin.getConfig();

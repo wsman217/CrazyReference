@@ -2,6 +2,7 @@ package me.wsman217.CrazyReference;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.wsman217.CrazyReference.commands.ReferAdminCommand;
 import me.wsman217.CrazyReference.commands.ReferCommand;
 import me.wsman217.CrazyReference.configTools.configManager;
 import me.wsman217.CrazyReference.data.DataBase;
@@ -22,13 +23,16 @@ public class CrazyReference extends JavaPlugin {
 	public Metrics bStats;
 	private FileManager fileManager;
 	
-	private DataBase db = new DataBase();
-	private DataHandler dh = new DataHandler(db);
+	private DataBase db;
+	private DataHandler dh;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		bStats = new Metrics(this);
+		
+		db = new DataBase();
+		dh = new DataHandler(db);
 		
 		saveDefaultConfig();
 		db.openDatabaseConnection();
@@ -47,6 +51,7 @@ public class CrazyReference extends JavaPlugin {
 		
 		//Register the command /refer
 		getCommand("refer").setExecutor(new ReferCommand(this));
+		getCommand("referadmin").setExecutor(new ReferAdminCommand(this));
 	}
 
 	@Override
@@ -60,5 +65,9 @@ public class CrazyReference extends JavaPlugin {
 		if (fileManager == null)
 			throw new NullPointerException("File manger for plugin CrazyReference was null");
 		return fileManager;
+	}
+	
+	public DataHandler getDataHandler() {
+		return dh;
 	}
 }

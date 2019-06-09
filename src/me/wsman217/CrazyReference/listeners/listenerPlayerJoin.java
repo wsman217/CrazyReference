@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,9 +33,9 @@ public class ListenerPlayerJoin implements Listener {
 
 		if (e.getPlayer().hasPlayedBefore() == false) {
 			Player p = e.getPlayer();
-			
+
 			UUID pUUID = p.getUniqueId();
-			
+
 			List<String> variables = new ArrayList<String>();
 
 			for (Player players : plugin.getServer().getOnlinePlayers()) {
@@ -81,10 +82,11 @@ public class ListenerPlayerJoin implements Listener {
 					e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
 				}
 
+				OfflinePlayer p = plugin.getServer().getOfflinePlayer(inConfirm.get(e.getPlayer().getUniqueId()));
+				plugin.getDataHandler().updateOnReferredJoin((Player) p);
+
 				plugin.giveRewards.giveRewards(e.getPlayer(),
 						plugin.getServer().getPlayer(inConfirm.get(e.getPlayer().getUniqueId())));
-				plugin.cMan.incrementTotal(
-						plugin.getServer().getPlayer(inConfirm.get(e.getPlayer().getUniqueId())).getUniqueId());
 				inConfirm.remove(e.getPlayer().getUniqueId());
 				return;
 			} else if (message.startsWith("n") || message.startsWith("N")) {

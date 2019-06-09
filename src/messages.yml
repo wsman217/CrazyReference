@@ -45,6 +45,10 @@ Commands:
       UnableToAddPlayer: "&dYou are unable to add another player to your referal list!"
       PlayerAdded: "&dThe player %player% has been added to your referal list!"
       AlreadyInList: "&7This player is already in your referal list!"
+   Leaderboard: 
+      TopMessage: "&3--------CrazyReference Leaderboard--------"
+      LeaderMessage: "&3[&7%place%&3] &d%player_name% - %referrals%"
+      PageMessage: "&3Page %page% out of %size%"
       
       
       
