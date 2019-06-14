@@ -1,7 +1,5 @@
 package me.wsman217.CrazyReference.commands;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -13,8 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.wsman217.CrazyReference.CrazyReference;
-import me.wsman217.CrazyReference.data.DataHandler;
-import me.wsman217.CrazyReference.data.LeaderboardStorage;
 import me.wsman217.CrazyReference.tools.FileManager;
 
 public class ReferCommand implements CommandExecutor {
@@ -23,7 +19,7 @@ public class ReferCommand implements CommandExecutor {
 
 	CrazyReference plugin;
 
-	// The max amount of referals that a player can have at once
+	// The max amount of referrals that a player can have at once
 	int amountOfReference;
 
 	public ReferCommand(CrazyReference plugin) {
@@ -37,7 +33,7 @@ public class ReferCommand implements CommandExecutor {
 		// Check if the command executor is the console
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(translateColors(
-					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
+					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.PlayersOnly")));
 			return true;
 		}
 
@@ -58,62 +54,12 @@ public class ReferCommand implements CommandExecutor {
 			// Check for the "reload" argument
 			if (args[0].equalsIgnoreCase("reload"))
 				return onReloadCommand(p, args);
-			if (args[0].equalsIgnoreCase("leaderboard") || args[0].equalsIgnoreCase("lb"))
-				return onLeaderboardCommand(p, args);
 			// If it is none of those send the help message
 			else
-				return onHelpCommand(p, args);
+				return onHelpCommand(p);
 		} else
 			// If the arguments are less than 1 send the help message
-			return onHelpCommand(p, args);
-	}
-
-	private boolean onLeaderboardCommand(Player p, String[] args) {
-
-		if (!p.hasPermission("CrazyReference.leaderboard")) {
-			p.sendMessage(translateColors(
-					plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("General.NoPerms")));
-		}
-
-		DataHandler dh = plugin.getDataHandler();
-		ArrayList<LeaderboardStorage> leader = dh.getLeaderboard();
-		int page = 1;
-		int size = (leader.size() / 10) + 1;
-
-		if (args.length >= 2) {
-			if (!isNumeric(args[1])) {
-				p.sendMessage(ChatColor.DARK_RED + "Please enter a proper page number.");
-				return true;
-			}
-			page = Integer.parseInt(args[1]);
-		}
-
-		if (page > size) {
-			page = size;
-		}
-
-		p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
-				.getString("Commands.Leaderboard.TopMessage")));
-		int count = (page * 10) - 10;
-		Iterator<LeaderboardStorage> iterate = leader.iterator();
-		for (int i = 0; i < count; i++) {
-			if (iterate.hasNext())
-				iterate.next();
-		}
-
-		for (int i = 0; i < 10; i++) {
-			if (iterate.hasNext()) {
-				LeaderboardStorage lbs = iterate.next();
-				p.sendMessage(translateColors(plugin.getFileManager().getFile(FileManager.Files.MESSAGE)
-						.getString("Commands.Leaderboard.LeaderMessage").replaceAll("%place%", "" + (count + i + 1))
-						.replaceAll("%player_name%", lbs.getPlayerName())
-						.replaceAll("%referrals%", "" + lbs.getTotalReferrals())));
-			}
-		}
-		p.sendMessage(translateColors(
-				plugin.getFileManager().getFile(FileManager.Files.MESSAGE).getString("Commands.Leaderboard.PageMessage")
-						.replaceAll("%page%", "" + page).replaceAll("%size%", "" + size)));
-		return true;
+			return onHelpCommand(p);
 	}
 
 	private boolean onReloadCommand(Player p, String[] args) {
@@ -132,7 +78,7 @@ public class ReferCommand implements CommandExecutor {
 		return true;
 	}
 
-	private boolean onHelpCommand(Player p, String[] args) {
+	private boolean onHelpCommand(Player p) {
 
 		// Check for the help permission
 		if (p.hasPermission("CrazyReference.help")) {
@@ -297,14 +243,5 @@ public class ReferCommand implements CommandExecutor {
 
 	private String translateColors(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
-	}
-
-	public boolean isNumeric(String str) {
-		try {
-			Double.parseDouble(str);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
 	}
 }

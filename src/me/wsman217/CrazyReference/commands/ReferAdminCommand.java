@@ -30,9 +30,15 @@ public class ReferAdminCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+		
 		if (!sender.hasPermission("CrazyReference.admin"))
 			return sendNoPerms(sender);
+		
+		if (!plugin.getConfig().getBoolean("Settings.LeaderboardEnabled")) {
+			sender.sendMessage(ChatColor.RED
+					+ "Sorry this command has been disabled please contact the server administrators for help.");
+			return true;
+		}
 
 		if (args.length < 1) {
 			return sendInfoMsg(sender);

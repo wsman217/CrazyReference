@@ -3,6 +3,7 @@ General:
    NoPerms: "&5You do not have the correct permissions to use this command!"
    ConfigsReloaded: "&dCrazyReference's config files have been reloaded."
    YouHaveNotReferredAnyoneYet: "&4You have not referred anyone yet!"
+   PlayersOnly: "&3You must be a player to use this command!"
 #All the way to commands are multi-line messages
 #So the messages will be sent in multiple lines like this comment
 #To add a new line add a '- "<Your message here>"'
@@ -45,10 +46,18 @@ Commands:
       UnableToAddPlayer: "&dYou are unable to add another player to your referal list!"
       PlayerAdded: "&dThe player %player% has been added to your referal list!"
       AlreadyInList: "&7This player is already in your referal list!"
-   Leaderboard: 
-      TopMessage: "&3--------CrazyReference Leaderboard--------"
-      LeaderMessage: "&3[&7%place%&3] &d%player_name% - %referrals%"
-      PageMessage: "&3Page %page% out of %size%"
+   ReferLeaderboard: 
+      Leaderboard: 
+         TopMessage: "&3--------CrazyReference Leaderboard--------"
+         LeaderMessage: "&3[&7%place%&3] &d%player_name% - %referrals%"
+         PageMessage: "&3Page %page% out of %size%"
+      Rank:
+         YouAreNotOnLb: "&4You are not currently on the leaderboard!"
+         OtherNotOnLb: "&4The player you are looking for is not on the leaderboard!"
+         OnLb: 
+            PersonalTopMessage: "&b-=-=-=-=-Personal Rank-=-=-=-=-"
+            OtherTopMessage: "&b-=-=-=-=-%player_name% Rank-=-=-=-=-"
+            RankMessage: "&3[&7%place%&3] &d%player_name% &7- &3%referrals%" 
       
       
       

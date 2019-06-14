@@ -1,6 +1,6 @@
 main: me.wsman217.CrazyReference.CrazyReference
 name: CrazyReference
-version: 2.1
+version: 3.0
 author: wsman217
 api-version: 1.13
 
@@ -8,6 +8,14 @@ commands:
    refer:
       description: "Basic referal command"
       usage: /refer <arguments>
+      aliases: [rf]
+   referadmin:
+      description: "Admin referal commands"
+      aliases: [rfa]
+   referleaderboard:
+      description: "Referral leaderboard commands"
+      usage: /referleaderboard <arguments>
+      aliases: [rflb]
 
 permissions:
    CrazyReference.*: 
@@ -19,6 +27,11 @@ permissions:
          CrazyReference.del: true
          CrazyReference.new: true
          CrazyReference.reload: true
+         CrazyReference.admin: true
+         CrazyReference.Leaderboard: true
+         CrazyReference.Leaderboard.Rank: true
+         CrazyReference.Leaderboard.RankOthers: true
+         CrazyReference.Leaderboard.Help: true
    CrazyReference.help:
       description: "Help command for CrazyReference"
    CrazyReference.list:
@@ -29,3 +42,13 @@ permissions:
       description: "Add a referal"
    CrazyReference.reload:
       description: "Reload CrazyReference config"
+   CrazyReference.admin:
+      description: "Admin CrazyReference commands"
+   CrazyReference.Leaderboard:
+      description: "Referral leaderboard"
+   CrazyReference.Leaderboard.Rank:
+      description: "Show personal rank"
+   CrazyReference.Leaderboard.RankOthers:
+      description: "Show other peoples rankings"
+   CrazyReference.Leaderboard.Help:
+      description: "Show leaderboard help menu"

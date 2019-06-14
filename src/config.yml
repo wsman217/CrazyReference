@@ -1,6 +1,8 @@
 Settings:
    MaxAmountOfOpenReferences: 5
-   
+   LeaderboardEnabled: true
+
+#Only worry about this section if leaderboard is true  
 SQLite: false
 SQL:
    #By default this is local host
